@@ -87,14 +87,7 @@ const conf = defineConfig({
       token: secrets.yallage.onebotToken,
     },
     'adapter-discord': dcConfig,
-    'database-mysql': {
-      host: secrets.mysqlHost,
-      // Koishi 服务器监听的端口
-      port: secrets.mysqlPort,
-      user: secrets.mysqlUser,
-      password: secrets.mysqlPassword,
-      database: 'yallage_v4',
-    },
+    
     admin: {},
     common: {
       // onRepeat: {
