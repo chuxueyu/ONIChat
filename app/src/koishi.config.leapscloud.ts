@@ -245,6 +245,7 @@ const conf = defineConfig({
     // 'image-search': { saucenaoApiKey: [secrets.yallage.saucenaoApiKey] },
     '../../packages/koishi-plugin-mediawiki/src/index': mediawikiConfig,
     '../../packages/koishi-plugin-bdynamic/src/index': {},
+    blive: {},
     './plugins/cp': {},
   },
   autoAssign: true,
