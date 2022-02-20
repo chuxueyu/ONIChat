@@ -121,13 +121,13 @@ export default defineConfig({
   port: isDev ? 8083 : 8081,
   nickname: ['ONIChat'],
   plugins: {
-    'adapter-onebot': {
-      protocol: 'ws',
-      // 对应 cqhttp 配置项 ws_config.port
-      endpoint: secrets.onebotServer,
-      selfId: isDev ? secrets.onebotId2 : secrets.onebotId,
-      token: isDev ? secrets.onebotToken2 : secrets.onebotToken,
-    },
+    // 'adapter-onebot': {
+    //   protocol: 'ws',
+    //   // 对应 cqhttp 配置项 ws_config.port
+    //   endpoint: secrets.onebotServer,
+    //   selfId: isDev ? secrets.onebotId2 : secrets.onebotId,
+    //   token: isDev ? secrets.onebotToken2 : secrets.onebotToken,
+    // },
     'adapter-discord': dcConfig,
     'adapter-telegram': {
       pollingTimeout: true,
@@ -170,7 +170,9 @@ export default defineConfig({
     bdynamic: bDynamicConfig,
     blive: {},
     migrate: {},
-    meme: {},
+    meme: {
+      minInterval: 0,
+    },
     'rate-limit': {},
     'koishi-plugin-mediawiki': mediawikiConfig,
     './plugins/rssPlus': {},
@@ -182,7 +184,7 @@ export default defineConfig({
       links: linksConfig,
     },
   },
-  autoAssign: false,
+  autoAssign: true,
   autoAuthorize: 1,
   prefix: ['.', '。'],
   watch: {
@@ -193,7 +195,9 @@ export default defineConfig({
   logger: {
     levels: {
       base: 2,
+      mysql: 3,
       rss: 3,
+      meme: 3,
     },
     showTime: true,
   },

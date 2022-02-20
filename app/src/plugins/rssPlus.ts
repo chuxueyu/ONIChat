@@ -1,6 +1,6 @@
 import { Logger, Time } from '@koishijs/utils';
 import RssParser from 'rss-parser';
-import { Context, Session } from 'koishi';
+import { Context, Session, sleep } from 'koishi';
 import RssFeedEmitter from 'rss-feed-emitter';
 import textVersion from 'textversionjs';
 
@@ -78,12 +78,10 @@ export function apply(ctx: Context, config: Config = {}): void {
 
   ctx.on('ready', async () => {
     feeder.on('error', (err: Error) => {
-      logger.debug(err.message);
+      logger.warn(err.message);
     });
 
-    const records = await ctx.database.get('rss', {
-      assignee: ctx.bots.map((bot) => bot.sid),
-    });
+    const records = await ctx.database.get('rss', {});
     for (const r of records) {
       const channelId = `${r.session.platform}:${r.session.channelId}`;
       if (channelId === undefined) {
@@ -102,12 +100,16 @@ export function apply(ctx: Context, config: Config = {}): void {
       logger.warn([...feedMap[source]]);
 
       await ctx.broadcast([...feedMap[source]], msg);
-      feedMap[source].forEach((e) => {
+
+      for (const e of feedMap[source]) {
         if (e.includes(':private:')) {
-          const userId = e.split(':private:')[1];
-          ctx.bots[0].sendPrivateMessage(userId, msg);
+          const [platfrom, userId] = e.split(':private:');
+          const bot = ctx.bots.find((b) => b.platform == platfrom);
+          if (!bot) logger.warn('No bot on platform ' + platfrom);
+          else bot.sendPrivateMessage(userId, msg);
+          await sleep(1000);
         }
-      });
+      }
     });
   });
 
